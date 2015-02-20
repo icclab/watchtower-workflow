@@ -1,0 +1,22 @@
+#!/bin/sh
+
+case "$1" in
+  configure)
+  	if ! [ `egrep -i "^watchtower:" /etc/group` ]; then
+  	  addgroup --system watchtower
+  	fi
+  	
+  	if ! [ `getent passwd watchtower-workflow` ]; then
+      adduser --system --group --no-create-home watchtower-workflow
+      adduser watchtower-workflow watchtower 
+    fi
+    
+    if ! [ -d "/var/log/watchtower/" ]; then
+      mkdir -p /var/log/watchtower/
+      chgrp watchtower /var/log/watchtower/
+      chmod g+w /var/log/watchtower/
+    fi
+  ;;
+esac
+
+exit 0
