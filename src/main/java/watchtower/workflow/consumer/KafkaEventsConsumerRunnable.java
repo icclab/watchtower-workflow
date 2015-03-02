@@ -24,6 +24,7 @@ import com.google.inject.assistedinject.Assisted;
 import kafka.consumer.KafkaStream;
 import watchtower.workflow.provider.Provider;
 import watchtower.common.event.Event;
+import watchtower.common.event.EventUtils;
 
 public class KafkaEventsConsumerRunnable extends KafkaConsumerRunnable<Event> {
   private static final Logger logger = LoggerFactory.getLogger(KafkaEventsConsumerRunnable.class);
@@ -39,9 +40,9 @@ public class KafkaEventsConsumerRunnable extends KafkaConsumerRunnable<Event> {
   }
 
   @Override
-  protected void consumeMessage(String message) {
+  protected void consumeMessage(byte[] message) {
     try {
-      final Event event = objectMapper.readValue(message, Event.class);
+      final Event event = EventUtils.fromJson(message);
       
       logger.info("Received {}", event);
       

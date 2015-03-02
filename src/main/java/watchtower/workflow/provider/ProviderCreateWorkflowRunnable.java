@@ -13,20 +13,15 @@
  */
 package watchtower.workflow.provider;
 
-import com.google.inject.Inject;
-
 import watchtower.common.event.Event;
-import watchtower.workflow.configuration.WatchtowerWorkflowConfiguration;
+import watchtower.workflow.configuration.ProviderConfiguration;
 
-public class CamundaProvider extends Provider {
-
-  @Inject
-  public CamundaProvider(WatchtowerWorkflowConfiguration configuration) {
-    super(configuration);
-  }
+public abstract class ProviderCreateWorkflowRunnable implements Runnable {
+  protected final ProviderConfiguration providerConfiguration;
+  protected final Event event;
   
-  @Override
-  public void createWorkflowInstance(Event event) {
-    
+  public ProviderCreateWorkflowRunnable(ProviderConfiguration providerConfiguration, Event event) {
+    this.providerConfiguration = providerConfiguration;
+    this.event = event;
   }
 }

@@ -22,4 +22,9 @@ public class CamundaProviderConfiguration extends ProviderConfiguration {
   public String getEndpoint() {
     return endpoint;
   }
+
+  @Override
+  public String getProviderName() {
+    return "camunda";
+  }
 }

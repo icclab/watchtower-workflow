@@ -13,6 +13,15 @@
  */
 package watchtower.workflow.configuration;
 
-public class ProviderConfiguration {
+import org.hibernate.validator.constraints.NotEmpty;
 
+public abstract class ProviderConfiguration {
+  @NotEmpty
+  private int numThreads;
+  
+  public int getNumThreads() {
+    return numThreads;
+  }
+  
+  public abstract String getProviderName();
 }

@@ -140,7 +140,7 @@
                 <data>
                   <type>file</type>
                   <src>${project.basedir}/src/deb/etc/workflow-config.yml-sample</src>
-                  <dst>/etc/monasca/workflow-config.yml-sample</dst>
+                  <dst>/etc/watchtower/workflow-config.yml-sample</dst>
                 </data>
               </dataSet>
             </configuration>

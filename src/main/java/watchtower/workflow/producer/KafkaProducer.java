@@ -13,7 +13,6 @@
  */
 package watchtower.workflow.producer;
 
-import io.dropwizard.cli.Command;
 
 import java.util.Properties;
 
@@ -26,6 +25,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.inject.Inject;
 
+import watchtower.common.automation.Command;
+import watchtower.common.automation.CommandUtils;
 import watchtower.workflow.configuration.KafkaProducerConfiguration;
 import watchtower.workflow.configuration.WatchtowerWorkflowConfiguration;
 
@@ -46,7 +47,7 @@ public class KafkaProducer {
     logger.debug("Sending command: {}", command.toString());
     
     final KeyedMessage<String, String> message =
-        new KeyedMessage<String, String>(producerConfiguration.getTopic(), command.getName(), command.toString());
+        new KeyedMessage<String, String>(producerConfiguration.getTopic(), command.getType().toString(), CommandUtils.toJson(command));
     
     producer.send(message);
   }
