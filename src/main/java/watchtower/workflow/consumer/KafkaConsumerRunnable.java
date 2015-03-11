@@ -39,6 +39,7 @@ public abstract class KafkaConsumerRunnable<T> implements Runnable {
 
   public void run() {
     logger.debug("KafkaChannel {} has stream", this.threadNumber);
+    
     final ConsumerIterator<byte[], byte[]> streamIterator = stream.iterator();
     
     running = true;

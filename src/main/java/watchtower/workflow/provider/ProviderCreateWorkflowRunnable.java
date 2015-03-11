@@ -19,9 +19,11 @@ import watchtower.workflow.configuration.ProviderConfiguration;
 public abstract class ProviderCreateWorkflowRunnable implements Runnable {
   protected final ProviderConfiguration providerConfiguration;
   protected final Event event;
+  protected final int threadNumber;
   
-  public ProviderCreateWorkflowRunnable(ProviderConfiguration providerConfiguration, Event event) {
+  public ProviderCreateWorkflowRunnable(ProviderConfiguration providerConfiguration, Event event, int threadNumber) {
     this.providerConfiguration = providerConfiguration;
     this.event = event;
+    this.threadNumber = threadNumber;
   }
 }

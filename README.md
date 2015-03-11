@@ -9,8 +9,8 @@
 The best way to install **watchtower-workflow** is to download and build it with Maven. Please note you need to download and install **watchtower-common** beforehand.
 
 ```
-git clone https://github.com/icclab/watchtower-monitoring.git
-cd watchtower-monitoring
+git clone https://github.com/icclab/watchtower-workflow.git
+cd watchtower-workflow
 mvn clean package
 ```
 

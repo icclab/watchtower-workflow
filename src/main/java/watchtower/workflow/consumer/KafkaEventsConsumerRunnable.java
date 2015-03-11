@@ -16,8 +16,6 @@ package watchtower.workflow.consumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
@@ -28,15 +26,10 @@ import watchtower.common.event.EventUtils;
 
 public class KafkaEventsConsumerRunnable extends KafkaConsumerRunnable<Event> {
   private static final Logger logger = LoggerFactory.getLogger(KafkaEventsConsumerRunnable.class);
-  private final ObjectMapper objectMapper;
   
   @Inject
   public KafkaEventsConsumerRunnable(@Assisted KafkaStream<byte[], byte[]> stream, @Assisted int threadNumber, Provider provider) {
     super(stream, threadNumber, provider);
-    
-    objectMapper = new ObjectMapper();
-    objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-    objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
   }
 
   @Override
@@ -45,8 +38,7 @@ public class KafkaEventsConsumerRunnable extends KafkaConsumerRunnable<Event> {
       final Event event = EventUtils.fromJson(message);
       
       logger.info("Received {}", event);
-      
-      
+      provider.createWorkflowInstance(event);
     } catch (Exception e) {
       logger.error("Failed to deserialize JSON message: " + message, e);
     }

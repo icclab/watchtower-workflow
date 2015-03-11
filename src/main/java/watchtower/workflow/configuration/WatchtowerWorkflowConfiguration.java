@@ -13,11 +13,13 @@
  */
 package watchtower.workflow.configuration;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import watchtower.workflow.configuration.KafkaConsumerConfiguration;
 import watchtower.workflow.configuration.ProviderConfiguration;
 import io.dropwizard.Configuration;
+import io.dropwizard.client.JerseyClientConfiguration;
 
 public class WatchtowerWorkflowConfiguration extends Configuration {
   @NotNull
@@ -34,6 +36,10 @@ public class WatchtowerWorkflowConfiguration extends Configuration {
   
   @NotNull
   private CamundaProviderConfiguration camundaProviderConfiguration;
+  
+  @Valid
+  @NotNull
+  private JerseyClientConfiguration jerseyClientConfiguration = new JerseyClientConfiguration();
   
   public String getName() {
     return name;
@@ -60,5 +66,9 @@ public class WatchtowerWorkflowConfiguration extends Configuration {
   
   public CamundaProviderConfiguration getCamundaProviderConfiguration() {
     return camundaProviderConfiguration;
+  }
+  
+  public JerseyClientConfiguration getJerseyClientConfiguration() {
+    return jerseyClientConfiguration;
   }
 }

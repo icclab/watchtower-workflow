@@ -6,6 +6,9 @@ server:
   applicationConnectors:
     - type: http
       port: 9000
+  adminConnectors:
+    - type: http
+      port: 9001
       
 # Kafka consumer configuration
 kafkaConsumerConfiguration:
@@ -57,7 +60,8 @@ kafkaProducerConfiguration:
 workflowProvider: camunda
 
 camundaProviderConfiguration:
-  endpoint: http://localhost:8080/camunda/
+  endpoint: http://watchtower:8080/watchtower-workflow-camunda/v1.0/workflow
+  numThreads: 1
 
 # Logging settings.
 logging:

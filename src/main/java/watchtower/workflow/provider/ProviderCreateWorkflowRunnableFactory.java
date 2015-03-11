@@ -17,5 +17,5 @@ import watchtower.common.event.Event;
 import watchtower.workflow.configuration.ProviderConfiguration;
 
 public interface ProviderCreateWorkflowRunnableFactory {
-  ProviderCreateWorkflowRunnable create(ProviderConfiguration configuration, Event event);
+  ProviderCreateWorkflowRunnable create(ProviderConfiguration configuration, Event event, int threadNumber);
 }

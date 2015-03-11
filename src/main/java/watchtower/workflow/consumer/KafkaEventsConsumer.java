@@ -16,15 +16,16 @@ package watchtower.workflow.consumer;
 import kafka.consumer.KafkaStream;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import watchtower.workflow.configuration.WatchtowerWorkflowConfiguration;
 import watchtower.workflow.provider.Provider;
 import watchtower.common.event.Event;
 
+@Singleton
 public class KafkaEventsConsumer extends KafkaConsumer<Event> {
   @Inject
   private KafkaEventsConsumerRunnableFactory eventsConsumerRunnableFactory;
-  private Provider provider;
   
   @Inject
   public KafkaEventsConsumer(WatchtowerWorkflowConfiguration configuration, Provider provider) {
@@ -34,7 +35,6 @@ public class KafkaEventsConsumer extends KafkaConsumer<Event> {
   @Override
   protected KafkaConsumerRunnable<Event> createRunnable(KafkaStream<byte[], byte[]> stream,
       int threadNumber) {
-    
     return eventsConsumerRunnableFactory.create(stream, threadNumber, provider);
   }
 

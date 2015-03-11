@@ -34,13 +34,13 @@ import com.codahale.metrics.annotation.Timed;
 import com.google.inject.Inject;
 
 @Path("/v1.0/jobs")
-public class AutomationResource {
-  private static final Logger logger = LoggerFactory.getLogger(AutomationResource.class);
+public class JobsResource {
+  private static final Logger logger = LoggerFactory.getLogger(JobsResource.class);
       
   private KafkaProducer kafkaProducer;
   
   @Inject
-  public AutomationResource(KafkaProducer kafkaProducer) {
+  public JobsResource(KafkaProducer kafkaProducer) {
     this.kafkaProducer = kafkaProducer;
   }
   
@@ -48,9 +48,9 @@ public class AutomationResource {
   @Timed
   @Consumes(MediaType.APPLICATION_JSON)
   @Produces(MediaType.APPLICATION_JSON)
-  public Response create(@Context UriInfo uriInfo, Job job) {
+  public Response runJob(@Context UriInfo uriInfo, Job job) {
     logger.info("Received {}", job);
-    kafkaProducer.send(new Command(CommandType.CREATE_JOB, job));
+    kafkaProducer.send(new Command(CommandType.RUN_JOB, job));
     return Response.ok().build();
   }
 }

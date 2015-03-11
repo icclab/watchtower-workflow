@@ -15,6 +15,7 @@ package watchtower.workflow.provider;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -33,6 +34,7 @@ public abstract class Provider implements Managed {
   
   protected final ProviderConfiguration providerConfiguration;
   private ExecutorService executorService;
+  private int numberOfThreads = 0;
   
   @Inject
   public Provider(@Assisted WatchtowerWorkflowConfiguration configuration) {
@@ -62,5 +64,25 @@ public abstract class Provider implements Managed {
     }
   }
   
-  public abstract void createWorkflowInstance(Event event);
+  public void createWorkflowInstance(Event event) {
+    if (executorService == null) {
+      logger.error("Provider executor service is null, restarting it");
+      try {
+        start();
+      } catch (Exception e) {
+        logger.error("Couldn't restart it: {} ", e);
+        
+        return;
+      }
+    }
+    
+    try {
+      executorService.submit(createRunnable(providerConfiguration, event, numberOfThreads++));
+    } catch (RejectedExecutionException ree) {
+      logger.debug("Failed to submit runnable: {}", ree);
+    }
+  }
+  
+  protected abstract ProviderCreateWorkflowRunnable createRunnable(ProviderConfiguration providerConfiguration, Event event,
+      int threadNumber);
 }

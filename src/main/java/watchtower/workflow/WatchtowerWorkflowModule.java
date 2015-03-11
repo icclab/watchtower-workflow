@@ -25,6 +25,8 @@ import watchtower.workflow.consumer.KafkaEventsConsumerRunnableFactory;
 import watchtower.workflow.producer.KafkaProducer;
 import watchtower.workflow.producer.KafkaProducerFactory;
 import watchtower.workflow.provider.CamundaProvider;
+import watchtower.workflow.provider.CamundaProviderCreateWorkflowRunnable;
+import watchtower.workflow.provider.CamundaProviderCreateWorkflowRunnableFactory;
 import watchtower.workflow.provider.CamundaProviderFactory;
 import watchtower.workflow.provider.Provider;
 
@@ -57,6 +59,8 @@ public class WatchtowerWorkflowModule extends AbstractModule {
         .build(KafkaEventsConsumerFactory.class));
     
     if (configuration.getWorkflowProvider().equalsIgnoreCase("camunda")) {
+      install(new FactoryModuleBuilder().implement(CamundaProviderCreateWorkflowRunnable.class, CamundaProviderCreateWorkflowRunnable.class)
+          .build(CamundaProviderCreateWorkflowRunnableFactory.class));
       install(new FactoryModuleBuilder().implement(CamundaProvider.class, CamundaProvider.class)
           .build(CamundaProviderFactory.class));
       
