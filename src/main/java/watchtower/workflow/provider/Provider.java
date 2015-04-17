@@ -13,6 +13,8 @@
  */
 package watchtower.workflow.provider;
 
+import io.dropwizard.lifecycle.Managed;
+
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
@@ -21,68 +23,73 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
-
-import io.dropwizard.lifecycle.Managed;
+import watchtower.common.automation.JobExecution;
 import watchtower.common.event.Event;
 import watchtower.workflow.configuration.ProviderConfiguration;
 import watchtower.workflow.configuration.WatchtowerWorkflowConfiguration;
+import watchtower.workflow.provider.runnable.CamundaProviderInstantiateWorkflowRunnable;
+import watchtower.workflow.provider.runnable.ProviderAttachJobExecutionToWorkflowInstanceRunnable;
+
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 
 public abstract class Provider implements Managed {
   private static final Logger logger = LoggerFactory.getLogger(Provider.class);
-  
+
   protected final ProviderConfiguration providerConfiguration;
   private ExecutorService executorService;
   private int numberOfThreads = 0;
-  
+
   @Inject
   public Provider(@Assisted WatchtowerWorkflowConfiguration configuration) {
     this.providerConfiguration = configuration.getCamundaProviderConfiguration();
   }
-  
+
   public void start() throws Exception {
     executorService = Executors.newFixedThreadPool(providerConfiguration.getNumThreads());
   }
-  
+
   public void stop() throws Exception {
     if (executorService != null) {
       executorService.shutdown();
-      
+
       try {
         if (!executorService.awaitTermination(60, TimeUnit.SECONDS)) {
           executorService.shutdownNow();
-          
+
           if (!executorService.awaitTermination(60, TimeUnit.SECONDS))
             logger.debug("ExecutorService did not terminate");
         }
       } catch (InterruptedException ie) {
         executorService.shutdownNow();
-        
+
         logger.debug("ExecutorService did not terminate", ie);
       }
     }
   }
-  
-  public void createWorkflowInstance(Event event) {
-    if (executorService == null) {
-      logger.error("Provider executor service is null, restarting it");
-      try {
-        start();
-      } catch (Exception e) {
-        logger.error("Couldn't restart it: {} ", e);
-        
-        return;
-      }
-    }
-    
+
+  public void instantiateWorkflow(Event event) {
     try {
-      executorService.submit(createRunnable(providerConfiguration, event, numberOfThreads++));
+      executorService.submit(createInstantiateWorkflowRunnable(providerConfiguration, event,
+          numberOfThreads++));
     } catch (RejectedExecutionException ree) {
       logger.debug("Failed to submit runnable: {}", ree);
     }
   }
-  
-  protected abstract ProviderCreateWorkflowRunnable createRunnable(ProviderConfiguration providerConfiguration, Event event,
-      int threadNumber);
+
+  public void attachJobExecutionToWorkflowInstance(String workflowInstanceId, JobExecution execution) {
+    try {
+      executorService.submit(attachJobExecutionToWorkflowInstanceRunnable(providerConfiguration,
+          workflowInstanceId, execution, numberOfThreads++));
+    } catch (RejectedExecutionException ree) {
+      logger.debug("Failed to submit runnable: {}", ree);
+    }
+  }
+
+  protected abstract CamundaProviderInstantiateWorkflowRunnable createInstantiateWorkflowRunnable(
+      ProviderConfiguration providerConfiguration, Event event, int threadNumber);
+
+  protected abstract ProviderAttachJobExecutionToWorkflowInstanceRunnable attachJobExecutionToWorkflowInstanceRunnable(
+      ProviderConfiguration providerConfiguration, String workflowInstanceId,
+      JobExecution execution, int threadNumber);
 }

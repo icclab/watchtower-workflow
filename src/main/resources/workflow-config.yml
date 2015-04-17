@@ -12,11 +12,13 @@ server:
 
 # Kafka consumer configuration
 kafkaConsumerConfiguration:
-  topic: watchtower-monitoring-events
+  eventTopic: watchtower-monitoring-events
+  executionTopic: watchtower-automation-executions
   numThreads: 2
   groupId: watchtower-workflow
   zookeeperConnect: watchtower:2181
-  consumerId: 1
+  eventConsumerId: 1
+  executionConsumerId: 2
   socketTimeoutMs: 30000
   socketReceiveBufferBytes : 65536
   fetchMessageMaxBytes: 1048576
@@ -60,7 +62,7 @@ kafkaProducerConfiguration:
 workflowProvider: camunda
 
 camundaProviderConfiguration:
-  endpoint: http://watchtower:8080/watchtower-workflow-camunda/v1.0/workflow
+  endpoint: http://watchtower:8080/watchtower-workflow-camunda/rest/v1.0/workflow
   numThreads: 1
 
 # Logging settings.

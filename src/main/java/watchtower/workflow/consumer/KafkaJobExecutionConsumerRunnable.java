@@ -18,18 +18,19 @@ import kafka.consumer.KafkaStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import watchtower.common.event.Event;
-import watchtower.common.event.EventUtils;
+import watchtower.common.automation.JobExecution;
+import watchtower.common.automation.JobExecutionUtils;
 import watchtower.workflow.provider.Provider;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 
-public class KafkaEventsConsumerRunnable extends KafkaConsumerRunnable<Event> {
-  private static final Logger logger = LoggerFactory.getLogger(KafkaEventsConsumerRunnable.class);
+public class KafkaJobExecutionConsumerRunnable extends KafkaConsumerRunnable<JobExecution> {
+  private static final Logger logger = LoggerFactory
+      .getLogger(KafkaJobExecutionConsumerRunnable.class);
 
   @Inject
-  public KafkaEventsConsumerRunnable(@Assisted KafkaStream<byte[], byte[]> stream,
+  public KafkaJobExecutionConsumerRunnable(@Assisted KafkaStream<byte[], byte[]> stream,
       @Assisted int threadNumber, Provider provider) {
     super(stream, threadNumber, provider);
   }
@@ -37,10 +38,11 @@ public class KafkaEventsConsumerRunnable extends KafkaConsumerRunnable<Event> {
   @Override
   protected void consumeMessage(byte[] key, byte[] message) {
     try {
-      final Event event = EventUtils.fromJson(message);
+      final JobExecution execution = JobExecutionUtils.fromJson(message);
 
-      logger.info("Received {}", event);
-      provider.instantiateWorkflow(event);
+      logger.info("Received {}", execution);
+
+      provider.attachJobExecutionToWorkflowInstance(new String(key), execution);
     } catch (Exception e) {
       logger.error("Failed to deserialize JSON message: " + message, e);
     }

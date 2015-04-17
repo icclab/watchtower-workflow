@@ -17,8 +17,8 @@
         <version>3.1</version>
         <configuration>
           <compilerArgument>-Xlint:all</compilerArgument>
-          <source>1.8</source>
-          <target>1.8</target>
+          <source>1.7</source>
+          <target>1.7</target>
           <encoding>UTF-8</encoding>
         </configuration>
       </plugin>
@@ -171,6 +171,7 @@
     <guava.version>18.0</guava.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>4.11</junit.version>
+    <kafka.version>0.8.2.1</kafka.version>
   </properties>
 </project>
 

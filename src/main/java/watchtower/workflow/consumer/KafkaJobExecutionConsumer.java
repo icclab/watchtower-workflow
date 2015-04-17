@@ -14,7 +14,7 @@
 package watchtower.workflow.consumer;
 
 import kafka.consumer.KafkaStream;
-import watchtower.common.event.Event;
+import watchtower.common.automation.JobExecution;
 import watchtower.workflow.configuration.WatchtowerWorkflowConfiguration;
 import watchtower.workflow.provider.Provider;
 
@@ -22,28 +22,28 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 @Singleton
-public class KafkaEventsConsumer extends KafkaConsumer<Event> {
+public class KafkaJobExecutionConsumer extends KafkaConsumer<JobExecution> {
   @Inject
-  private KafkaEventsConsumerRunnableFactory eventsConsumerRunnableFactory;
+  private KafkaJobExecutionConsumerRunnableFactory executionsConsumerRunnableFactory;
 
   @Inject
-  public KafkaEventsConsumer(WatchtowerWorkflowConfiguration configuration, Provider provider) {
+  public KafkaJobExecutionConsumer(WatchtowerWorkflowConfiguration configuration, Provider provider) {
     super(configuration, provider);
   }
 
   @Override
-  protected KafkaConsumerRunnable<Event> createRunnable(KafkaStream<byte[], byte[]> stream,
+  protected KafkaConsumerRunnable<JobExecution> createRunnable(KafkaStream<byte[], byte[]> stream,
       int threadNumber) {
-    return eventsConsumerRunnableFactory.create(stream, threadNumber, provider);
+    return executionsConsumerRunnableFactory.create(stream, threadNumber, provider);
   }
 
   @Override
   protected String getTopic() {
-    return kafkaConfiguration.getEventTopic();
+    return kafkaConfiguration.getExecutionTopic();
   }
 
   @Override
   protected String getConsumerId() {
-    return kafkaConfiguration.getEventConsumerId();
+    return kafkaConfiguration.getExecutionConsumerId();
   }
 }

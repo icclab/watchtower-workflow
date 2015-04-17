@@ -11,19 +11,11 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package watchtower.workflow.provider;
+package watchtower.workflow.provider.runnable;
 
 import watchtower.common.event.Event;
 import watchtower.workflow.configuration.ProviderConfiguration;
 
-public abstract class ProviderCreateWorkflowRunnable implements Runnable {
-  protected final ProviderConfiguration providerConfiguration;
-  protected final Event event;
-  protected final int threadNumber;
-  
-  public ProviderCreateWorkflowRunnable(ProviderConfiguration providerConfiguration, Event event, int threadNumber) {
-    this.providerConfiguration = providerConfiguration;
-    this.event = event;
-    this.threadNumber = threadNumber;
-  }
+public interface CamundaProviderInstantiateWorkflowRunnableFactory {
+  CamundaProviderInstantiateWorkflowRunnable create(ProviderConfiguration providerConfiguration, Event event, int threadNumber);
 }

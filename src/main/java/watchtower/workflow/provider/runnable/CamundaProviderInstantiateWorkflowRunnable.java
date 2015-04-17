@@ -11,12 +11,17 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package watchtower.workflow.provider;
+package watchtower.workflow.provider.runnable;
 
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import watchtower.common.event.Event;
+import watchtower.common.incident.Incident;
+import watchtower.workflow.configuration.CamundaProviderConfiguration;
+import watchtower.workflow.configuration.ProviderConfiguration;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
@@ -24,23 +29,21 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-import watchtower.common.event.Event;
-import watchtower.common.incident.Incident;
-import watchtower.workflow.configuration.CamundaProviderConfiguration;
-import watchtower.workflow.configuration.ProviderConfiguration;
+public class CamundaProviderInstantiateWorkflowRunnable extends ProviderInstantiateWorkflowRunnable {
+  private static final Logger logger = LoggerFactory
+      .getLogger(CamundaProviderInstantiateWorkflowRunnable.class);
 
-public class CamundaProviderCreateWorkflowRunnable extends ProviderCreateWorkflowRunnable {
-  private static final Logger logger = LoggerFactory.getLogger(CamundaProviderCreateWorkflowRunnable.class);
-  
   @Inject
-  public CamundaProviderCreateWorkflowRunnable(
-      @Assisted ProviderConfiguration providerConfiguration, @Assisted Event event, @Assisted int threadNumber) {
+  public CamundaProviderInstantiateWorkflowRunnable(
+      @Assisted ProviderConfiguration providerConfiguration, @Assisted Event event,
+      @Assisted int threadNumber) {
     super(providerConfiguration, event, threadNumber);
   }
 
   @Override
   public void run() {
-    CamundaProviderConfiguration camundaProviderConfiguration = (CamundaProviderConfiguration) providerConfiguration;
+    CamundaProviderConfiguration camundaProviderConfiguration =
+        (CamundaProviderConfiguration) providerConfiguration;
 
     Client client = Client.create();
     WebResource webResource = client.resource(camundaProviderConfiguration.getEndpoint());
@@ -51,7 +54,7 @@ public class CamundaProviderCreateWorkflowRunnable extends ProviderCreateWorkflo
 
     logger.info("Got response {}", response);
     logger.info("Created {}", response.getEntity(Incident.class));
-    
+
     if (response.getStatus() != 200) {
       logger.error("Failed to send event to Camunda with HTTP error code: " + response.getStatus());
     }

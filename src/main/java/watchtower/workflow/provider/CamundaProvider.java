@@ -13,26 +13,43 @@
  */
 package watchtower.workflow.provider;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
+import watchtower.common.automation.JobExecution;
 import watchtower.common.event.Event;
 import watchtower.workflow.configuration.ProviderConfiguration;
 import watchtower.workflow.configuration.WatchtowerWorkflowConfiguration;
+import watchtower.workflow.provider.runnable.CamundaProviderAttachJobExecutionToWorkflowInstanceRunnableFactory;
+import watchtower.workflow.provider.runnable.CamundaProviderInstantiateWorkflowRunnable;
+import watchtower.workflow.provider.runnable.CamundaProviderInstantiateWorkflowRunnableFactory;
+import watchtower.workflow.provider.runnable.ProviderAttachJobExecutionToWorkflowInstanceRunnable;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 @Singleton
 public class CamundaProvider extends Provider {
   @Inject
-  private CamundaProviderCreateWorkflowRunnableFactory camundaProviderCreateWorkflowRunnableFactory;
-  
+  private CamundaProviderInstantiateWorkflowRunnableFactory camundaProviderInstantiateWorkflowRunnableFactory;
+
+  @Inject
+  private CamundaProviderAttachJobExecutionToWorkflowInstanceRunnableFactory camundaProviderAttachJobExecutionToWorkflowInstanceRunnableFactory;
+
   @Inject
   public CamundaProvider(WatchtowerWorkflowConfiguration configuration) {
     super(configuration);
   }
 
   @Override
-  protected ProviderCreateWorkflowRunnable createRunnable(
+  protected CamundaProviderInstantiateWorkflowRunnable createInstantiateWorkflowRunnable(
       ProviderConfiguration providerConfiguration, Event event, int threadNumber) {
-    return camundaProviderCreateWorkflowRunnableFactory.create(providerConfiguration, event, threadNumber);
+    return camundaProviderInstantiateWorkflowRunnableFactory.create(providerConfiguration, event,
+        threadNumber);
+  }
+
+  @Override
+  protected ProviderAttachJobExecutionToWorkflowInstanceRunnable attachJobExecutionToWorkflowInstanceRunnable(
+      ProviderConfiguration providerConfiguration, String workflowInstanceId,
+      JobExecution execution, int threadNumber) {
+    return camundaProviderAttachJobExecutionToWorkflowInstanceRunnableFactory.create(
+        providerConfiguration, workflowInstanceId, execution, threadNumber);
   }
 }

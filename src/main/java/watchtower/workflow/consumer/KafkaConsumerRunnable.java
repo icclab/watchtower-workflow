@@ -16,6 +16,7 @@ package watchtower.workflow.consumer;
 import kafka.consumer.ConsumerIterator;
 import kafka.consumer.ConsumerTimeoutException;
 import kafka.consumer.KafkaStream;
+import kafka.message.MessageAndMetadata;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,41 +26,43 @@ import watchtower.workflow.provider.Provider;
 
 public abstract class KafkaConsumerRunnable<T> implements Runnable {
   private static final Logger logger = LoggerFactory.getLogger(KafkaConsumerRunnable.class);
-  
+
   private final KafkaStream<byte[], byte[]> stream;
   private final int threadNumber;
   protected final Provider provider;
   private volatile boolean running;
-  
-  public KafkaConsumerRunnable(KafkaStream<byte[], byte[]> stream, int threadNumber, Provider provider) {
+
+  public KafkaConsumerRunnable(KafkaStream<byte[], byte[]> stream, int threadNumber,
+      Provider provider) {
     this.stream = stream;
     this.threadNumber = threadNumber;
     this.provider = provider;
   }
 
   public void run() {
-    logger.debug("KafkaChannel {} has stream", this.threadNumber);
-    
+    logger.info("KafkaChannel {} has stream", this.threadNumber);
+
     final ConsumerIterator<byte[], byte[]> streamIterator = stream.iterator();
-    
+
     running = true;
-    
+
     while (running) {
       try {
         if (streamIterator.hasNext()) {
-          final byte[] message = streamIterator.next().message();
-          
-          logger.debug("Thread {}: {}", threadNumber, message.toString());
-          
-          consumeMessage(message);
+          MessageAndMetadata<byte[], byte[]> messageAndMetadata = streamIterator.next();
+
+          byte[] key = messageAndMetadata.key();
+          byte[] message = messageAndMetadata.message();
+
+          consumeMessage(key, message);
         }
       } catch (ConsumerTimeoutException cte) {
         logger.debug("Timed out when consuming from Kafka", cte);
-        
+
         KafkaHealthCheck.getInstance().heartAttack(cte.getMessage());
       }
     }
   }
-  
-  abstract protected void consumeMessage(byte[] message);
+
+  abstract protected void consumeMessage(byte[] key, byte[] message);
 }

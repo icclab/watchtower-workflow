@@ -11,11 +11,12 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package watchtower.workflow.provider;
+package watchtower.workflow.consumer;
 
-import watchtower.common.event.Event;
-import watchtower.workflow.configuration.ProviderConfiguration;
+import watchtower.workflow.configuration.WatchtowerWorkflowConfiguration;
+import watchtower.workflow.provider.Provider;
 
-public interface CamundaProviderCreateWorkflowRunnableFactory {
-  CamundaProviderCreateWorkflowRunnable create(ProviderConfiguration providerConfiguration, Event event, int threadNumber);
+public interface KafkaJobExecutionConsumerFactory {
+  public KafkaJobExecutionConsumer create(WatchtowerWorkflowConfiguration configuration,
+      Provider provider);
 }

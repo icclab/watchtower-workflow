@@ -22,7 +22,10 @@ public class KafkaConsumerConfiguration implements Serializable {
   private static final long serialVersionUID = 6312614514245347452L;
 
   @NotEmpty
-  String topic;
+  String eventTopic;
+
+  @NotEmpty
+  String executionTopic;
 
   @NotEmpty
   Integer numThreads;
@@ -34,7 +37,10 @@ public class KafkaConsumerConfiguration implements Serializable {
   String zookeeperConnect;
 
   @NotEmpty
-  String consumerId;
+  String eventConsumerId;
+
+  @NotEmpty
+  String executionConsumerId;
 
   @NotEmpty
   Integer socketTimeoutMs;
@@ -87,91 +93,99 @@ public class KafkaConsumerConfiguration implements Serializable {
   @NotEmpty
   Integer zookeeperSyncTimeMs;
 
-  public String getTopic() {
-      return topic;
+  public String getEventTopic() {
+    return eventTopic;
+  }
+
+  public String getExecutionTopic() {
+    return executionTopic;
   }
 
   public Integer getNumThreads() {
-      return numThreads;
+    return numThreads;
   }
 
   public String getGroupId() {
-      return groupId;
+    return groupId;
   }
 
   public String getZookeeperConnect() {
-      return zookeeperConnect;
+    return zookeeperConnect;
   }
 
-  public String getConsumerId() {
-      return consumerId;
+  public String getEventConsumerId() {
+    return eventConsumerId;
+  }
+
+  public String getExecutionConsumerId() {
+    return executionConsumerId;
   }
 
   public Integer getSocketTimeoutMs() {
-      return socketTimeoutMs;
+    return socketTimeoutMs;
   }
 
   public Integer getSocketReceiveBufferBytes() {
-      return socketReceiveBufferBytes;
+    return socketReceiveBufferBytes;
   }
 
   public Integer getFetchMessageMaxBytes() {
-      return fetchMessageMaxBytes;
+    return fetchMessageMaxBytes;
   }
 
   public Boolean getAutoCommitEnable() {
-      return autoCommitEnable;
+    return autoCommitEnable;
   }
 
   public Integer getAutoCommitIntervalMs() {
-      return autoCommitIntervalMs;
+    return autoCommitIntervalMs;
   }
 
   public Integer getQueuedMaxMessageChunks() {
-      return queuedMaxMessageChunks;
+    return queuedMaxMessageChunks;
   }
 
   public Integer getRebalanceMaxRetries() {
-      return rebalanceMaxRetries;
+    return rebalanceMaxRetries;
   }
 
   public Integer getFetchMinBytes() {
-      return fetchMinBytes;
+    return fetchMinBytes;
   }
 
   public Integer getFetchWaitMaxMs() {
-      return fetchWaitMaxMs;
+    return fetchWaitMaxMs;
   }
 
   public Integer getRebalanceBackoffMs() {
-      return rebalanceBackoffMs;
+    return rebalanceBackoffMs;
   }
 
   public Integer getRefreshLeaderBackoffMs() {
-      return refreshLeaderBackoffMs;
+    return refreshLeaderBackoffMs;
   }
 
   public String getAutoOffsetReset() {
-      return autoOffsetReset;
+    return autoOffsetReset;
   }
 
   public Integer getConsumerTimeoutMs() {
-      return consumerTimeoutMs;
+    return consumerTimeoutMs;
   }
 
   public String getClientId() {
-      return clientId;
+    return clientId;
   }
 
   public Integer getZookeeperSessionTimeoutMs() {
-      return zookeeperSessionTimeoutMs;
+    return zookeeperSessionTimeoutMs;
   }
 
   public Integer getZookeeperConnectionTimeoutMs() {
-      return zookeeperConnectionTimeoutMs;
+    return zookeeperConnectionTimeoutMs;
   }
 
   public Integer getZookeeperSyncTimeMs() {
-      return zookeeperSyncTimeMs;
+    return zookeeperSyncTimeMs;
   }
 }

@@ -16,6 +16,7 @@
 		<dropwizard.version>0.7.0</dropwizard.version>
 		<guava.version>18.0</guava.version>
 		<guice.version>3.0</guice.version>
+		<kafka.version>0.8.2.1</kafka.version>
 		<junit.version>4.11</junit.version>
 		<resteasy.version>3.0.10.Final</resteasy.version>
 	</properties>
@@ -59,7 +60,7 @@
 		<dependency>
 			<groupId>org.apache.kafka</groupId>
 			<artifactId>kafka_2.9.2</artifactId>
-			<version>0.8.0</version>
+			<version>${kafka.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>com.sun.jmx</groupId>
@@ -72,6 +73,14 @@
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-simple</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -96,8 +105,8 @@
 				<version>3.1</version>
 				<configuration>
 					<compilerArgument>-Xlint:all</compilerArgument>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>1.7</source>
+					<target>1.7</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
