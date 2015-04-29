@@ -1,10 +1,16 @@
 *Please note that all watchtower components are under heavy development and the norm is that things will break. Please be patient with us until the first stable release.*
 
+<div align="center">
+	<img src="https://raw.githubusercontent.com/icclab/watchtower-common/master/watchtower.png" alt="Watchtower" title="Watchtower">
+</div>
+
 # Overview
 
 **watchtower-workflow** is part of **watchtower**. Its primary role is to provide an interface between the workflow engine and the rest of **watchtower**'s components.
 
-### Build Instructions
+## General instructions
+
+### Building
 
 The best way to install **watchtower-workflow** is to download and build it with Maven. Please note you need to download and install **watchtower-common** beforehand.
 
@@ -13,6 +19,35 @@ git clone https://github.com/icclab/watchtower-workflow.git
 cd watchtower-workflow
 mvn clean package
 ```
+
+### Installation
+
+The easies way to install `watchtower-workflow` is to install the `deb` package:
+
+```
+sudo dpkg -i debs/binaries/*.deb
+```
+
+For those which want to manually do everything, they can use the generated `jar`.
+
+### Configuration
+
+`watchtower-workflow` comes with a sample configuration file which, after installation, is located in `/etc/watchtower/`. Best way is to work your way from the provided sample:
+
+```
+sudo cp /etc/watchtower/workflow-config.yml-sample /etc/watchtower/workflow-config.yml
+```
+
+### Running
+
+The `deb` file contains service files for `Upstart` so you can just do:
+
+```
+sudo service watchtower-workflow start
+```
+
+Please note that the service does not automatically start after `deb` installation.
+
 
 # License
 
