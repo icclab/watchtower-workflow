@@ -4,8 +4,24 @@
   <groupId>watchtower</groupId>
   <artifactId>watchtower-workflow</artifactId>
   <name>watchtower-workflow</name>
-  <version>0.0.1-SNAPSHOT</version>
-  <url>http://maven.apache.org</url>
+  <version>1.0.0</version>
+  <description>watchtower-automation is a component of watchtower which handles communication with automation engines</description>
+  <url>https://github.com/icclab/watchtower-workflow</url>
+  <developers>
+    <developer>
+      <id>nemros</id>
+      <name>Victor Ion Munteanu</name>
+      <email>victor.munteanu@equillon.ro</email>
+      <url>https://github.com/nemros</url>
+    </developer>
+  </developers>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
   <scm>
     <connection>scm:git:git@github.com:icclab/watchtower-workflow</connection>
     <developerConnection>scm:git:git@github.com:icclab/watchtower-workflow</developerConnection>
@@ -164,7 +180,7 @@
     </dependency>
   </dependencies>
   <properties>
-    <watchtower.common.version>0.0.1-SNAPSHOT</watchtower.common.version>
+    <watchtower.common.version>1.0.0</watchtower.common.version>
     <guice.version>3.0</guice.version>
     <dropwizard.version>0.7.0</dropwizard.version>
     <resteasy.version>3.0.10.Final</resteasy.version>
