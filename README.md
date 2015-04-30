@@ -8,7 +8,7 @@
 
 **watchtower-workflow** is part of **watchtower**. Its primary role is to provide an interface between the workflow engine and the rest of **watchtower**'s components.
 
-## General instructions
+## General Instructions
 
 ### Building
 
