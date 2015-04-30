@@ -36,6 +36,7 @@
 		<kafka.version>0.8.2.1</kafka.version>
 		<junit.version>4.11</junit.version>
 		<resteasy.version>3.0.10.Final</resteasy.version>
+		<jdeb.version>1.4</jdeb.version>
 	</properties>
 
 	<scm>
@@ -225,7 +226,7 @@
 			<plugin>
 				<artifactId>jdeb</artifactId>
 				<groupId>org.vafer</groupId>
-				<version>1.0.1</version>
+				<version>${jdeb.version}</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -233,7 +234,7 @@
 							<goal>jdeb</goal>
 						</goals>
 						<configuration>
-							<deb>${project.basedir}/debs/binaries/watchtower-workflow-${project.version}.deb</deb>
+							<deb>${project.build.directory}/watchtower-workflow-${project.version}.deb</deb>
 							<dataSet>
 								<data>
 									<type>file</type>
