@@ -25,7 +25,7 @@ mvn clean package
 The easies way to install `watchtower-workflow` is to install the `deb` package:
 
 ```
-sudo dpkg -i debs/binaries/*.deb
+sudo dpkg -i target/watchtower-workflow-{version}.deb
 ```
 
 For those which want to manually do everything, they can use the generated `jar`.
