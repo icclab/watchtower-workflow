@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package watchtower.workflow.provider.runnable;
+package watchtower.workflow.provider.camunda;
 
 import javax.ws.rs.core.MediaType;
 
@@ -22,12 +22,13 @@ import watchtower.common.event.Event;
 import watchtower.common.incident.Incident;
 import watchtower.workflow.configuration.CamundaProviderConfiguration;
 import watchtower.workflow.configuration.ProviderConfiguration;
+import watchtower.workflow.provider.ProviderInstantiateWorkflowRunnable;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
+//import com.sun.jersey.api.client.Client;
+//import com.sun.jersey.api.client.ClientResponse;
+//import com.sun.jersey.api.client.WebResource;
 
 public class CamundaProviderInstantiateWorkflowRunnable extends ProviderInstantiateWorkflowRunnable {
   private static final Logger logger = LoggerFactory
@@ -45,18 +46,18 @@ public class CamundaProviderInstantiateWorkflowRunnable extends ProviderInstanti
     CamundaProviderConfiguration camundaProviderConfiguration =
         (CamundaProviderConfiguration) providerConfiguration;
 
-    Client client = Client.create();
-    WebResource webResource = client.resource(camundaProviderConfiguration.getEndpoint());
+    //Client client = Client.create();
+    //WebResource webResource = client.resource(camundaProviderConfiguration.getEndpoint());
 
-    ClientResponse response =
-        webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-            .post(ClientResponse.class, event);
+    //ClientResponse response =
+    //    webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
+    //        .post(ClientResponse.class, event);
 
-    logger.info("Got response {}", response);
-    logger.info("Created {}", response.getEntity(Incident.class));
+    //logger.info("Got response {}", response);
+    //logger.info("Created {}", response.getEntity(Incident.class));
 
-    if (response.getStatus() != 200) {
-      logger.error("Failed to send event to Camunda with HTTP error code: " + response.getStatus());
-    }
+    //if (response.getStatus() != 200) {
+    //  logger.error("Failed to send event to Camunda with HTTP error code: " + response.getStatus());
+    //}
   }
 }

@@ -11,16 +11,14 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package watchtower.workflow.provider;
+package watchtower.workflow.provider.camunda;
 
 import watchtower.common.automation.JobExecution;
 import watchtower.common.event.Event;
 import watchtower.workflow.configuration.ProviderConfiguration;
 import watchtower.workflow.configuration.WatchtowerWorkflowConfiguration;
-import watchtower.workflow.provider.runnable.CamundaProviderAttachJobExecutionToWorkflowInstanceRunnableFactory;
-import watchtower.workflow.provider.runnable.CamundaProviderInstantiateWorkflowRunnable;
-import watchtower.workflow.provider.runnable.CamundaProviderInstantiateWorkflowRunnableFactory;
-import watchtower.workflow.provider.runnable.ProviderAttachJobExecutionToWorkflowInstanceRunnable;
+import watchtower.workflow.provider.Provider;
+import watchtower.workflow.provider.ProviderAttachJobExecutionToWorkflowInstanceRunnable;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;

@@ -11,13 +11,23 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package watchtower.workflow.provider.runnable;
+package watchtower.workflow.provider;
 
 import watchtower.common.automation.JobExecution;
 import watchtower.workflow.configuration.ProviderConfiguration;
 
-public interface ProviderAttachJobExecutionToWorkflowInstanceRunnableFactory {
-  ProviderAttachJobExecutionToWorkflowInstanceRunnable create(
+public abstract class ProviderAttachJobExecutionToWorkflowInstanceRunnable implements Runnable {
+  protected final ProviderConfiguration providerConfiguration;
+  protected final String workflowInstanceId;
+  protected final JobExecution execution;
+  protected final int threadNumber;
+
+  public ProviderAttachJobExecutionToWorkflowInstanceRunnable(
       ProviderConfiguration providerConfiguration, String workflowInstanceId,
-      JobExecution execution, int threadNumber);
+      JobExecution execution, int threadNumber) {
+    this.providerConfiguration = providerConfiguration;
+    this.workflowInstanceId = workflowInstanceId;
+    this.execution = execution;
+    this.threadNumber = threadNumber;
+  }
 }

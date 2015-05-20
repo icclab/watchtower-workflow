@@ -11,7 +11,7 @@
  * or implied. See the License for the specific language governing permissions and limitations under
  * the License.
  */
-package watchtower.workflow.provider.runnable;
+package watchtower.workflow.provider.camunda;
 
 import watchtower.common.automation.JobExecution;
 import watchtower.workflow.configuration.ProviderConfiguration;

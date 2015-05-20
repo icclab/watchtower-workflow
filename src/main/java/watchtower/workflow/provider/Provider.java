@@ -27,8 +27,7 @@ import watchtower.common.automation.JobExecution;
 import watchtower.common.event.Event;
 import watchtower.workflow.configuration.ProviderConfiguration;
 import watchtower.workflow.configuration.WatchtowerWorkflowConfiguration;
-import watchtower.workflow.provider.runnable.CamundaProviderInstantiateWorkflowRunnable;
-import watchtower.workflow.provider.runnable.ProviderAttachJobExecutionToWorkflowInstanceRunnable;
+import watchtower.workflow.provider.camunda.CamundaProviderInstantiateWorkflowRunnable;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
