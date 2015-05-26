@@ -13,22 +13,27 @@
  */
 package watchtower.workflow.provider.camunda;
 
+import io.dropwizard.client.JerseyClientBuilder;
+import io.dropwizard.client.JerseyClientConfiguration;
+import io.dropwizard.setup.Environment;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import watchtower.common.event.Event;
-import watchtower.common.incident.Incident;
+import watchtower.common.event.EventUtils;
 import watchtower.workflow.configuration.CamundaProviderConfiguration;
 import watchtower.workflow.configuration.ProviderConfiguration;
 import watchtower.workflow.provider.ProviderInstantiateWorkflowRunnable;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-//import com.sun.jersey.api.client.Client;
-//import com.sun.jersey.api.client.ClientResponse;
-//import com.sun.jersey.api.client.WebResource;
 
 public class CamundaProviderInstantiateWorkflowRunnable extends ProviderInstantiateWorkflowRunnable {
   private static final Logger logger = LoggerFactory
@@ -36,9 +41,11 @@ public class CamundaProviderInstantiateWorkflowRunnable extends ProviderInstanti
 
   @Inject
   public CamundaProviderInstantiateWorkflowRunnable(
-      @Assisted ProviderConfiguration providerConfiguration, @Assisted Event event,
-      @Assisted int threadNumber) {
-    super(providerConfiguration, event, threadNumber);
+      @Assisted ProviderConfiguration providerConfiguration, @Assisted Environment environment,
+      @Assisted Event event, @Assisted int threadNumber) {
+    super(providerConfiguration, environment, event, threadNumber);
+
+    logger.info("Starting up workflow runnable");
   }
 
   @Override
@@ -46,18 +53,25 @@ public class CamundaProviderInstantiateWorkflowRunnable extends ProviderInstanti
     CamundaProviderConfiguration camundaProviderConfiguration =
         (CamundaProviderConfiguration) providerConfiguration;
 
-    //Client client = Client.create();
-    //WebResource webResource = client.resource(camundaProviderConfiguration.getEndpoint());
+    JerseyClientConfiguration jerseyClientConfiguration =
+        camundaProviderConfiguration.getJerseyClientConfiguration();
 
-    //ClientResponse response =
-    //    webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-    //        .post(ClientResponse.class, event);
+    jerseyClientConfiguration.setGzipEnabledForRequests(false);
 
-    //logger.info("Got response {}", response);
-    //logger.info("Created {}", response.getEntity(Incident.class));
+    Client client =
+        new JerseyClientBuilder(environment).using(
+            camundaProviderConfiguration.getJerseyClientConfiguration()).build(
+            "CamundaWorker" + threadNumber);
 
-    //if (response.getStatus() != 200) {
-    //  logger.error("Failed to send event to Camunda with HTTP error code: " + response.getStatus());
-    //}
+    WebTarget target = client.target(camundaProviderConfiguration.getEndpoint());
+
+    Response response =
+        target.request(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE)
+            .post(Entity.entity(EventUtils.toJson(event), MediaType.APPLICATION_JSON));
+
+    if (response.getStatus() != 200)
+      logger.error("Failed to send event to Camunda with HTTP error code: " + response.getStatus());
+    else
+      logger.info("Incident: {}", response.readEntity(String.class));
   }
 }

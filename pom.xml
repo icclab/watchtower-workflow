@@ -34,10 +34,8 @@
 		<dropwizard.version>0.8.1</dropwizard.version>
 		<guice.version>3.0</guice.version>
 		<kafka.version>0.8.2.1</kafka.version>
-		<hamcrest.version>1.3</hamcrest.version>
 		<mockito.version>1.9.5</mockito.version>
 		<junit.version>4.12</junit.version>
-		<resteasy.version>3.0.10.Final</resteasy.version>
 		<jdeb.version>1.4</jdeb.version>
 		<maven.jacoco.version>0.7.4.201502262128</maven.jacoco.version>
 		<maven.coveralls.version>3.1.0</maven.coveralls.version>
@@ -106,23 +104,6 @@
 					<artifactId>log4j</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.resteasy</groupId>
-			<artifactId>resteasy-jaxrs</artifactId>
-			<version>${resteasy.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-core</artifactId>
-			<version>${hamcrest.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-library</artifactId>
-			<version>${hamcrest.version}</version>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>

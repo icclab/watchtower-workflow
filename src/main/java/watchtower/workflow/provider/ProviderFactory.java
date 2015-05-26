@@ -13,8 +13,9 @@
  */
 package watchtower.workflow.provider;
 
+import io.dropwizard.setup.Environment;
 import watchtower.workflow.configuration.WatchtowerWorkflowConfiguration;
 
 public interface ProviderFactory {
-  Provider create(WatchtowerWorkflowConfiguration configuration);
+  Provider create(WatchtowerWorkflowConfiguration configuration, Environment environment);
 }

@@ -13,8 +13,9 @@
  */
 package watchtower.workflow.provider.camunda;
 
+import io.dropwizard.setup.Environment;
 import watchtower.workflow.configuration.WatchtowerWorkflowConfiguration;
 
 public interface CamundaProviderFactory {
-  CamundaProvider create(WatchtowerWorkflowConfiguration configuration);
+  CamundaProvider create(WatchtowerWorkflowConfiguration configuration, Environment environment);
 }

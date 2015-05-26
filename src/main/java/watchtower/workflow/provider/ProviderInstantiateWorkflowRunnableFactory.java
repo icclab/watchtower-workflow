@@ -13,10 +13,11 @@
  */
 package watchtower.workflow.provider;
 
+import io.dropwizard.setup.Environment;
 import watchtower.common.event.Event;
 import watchtower.workflow.configuration.ProviderConfiguration;
 
 public interface ProviderInstantiateWorkflowRunnableFactory {
   ProviderInstantiateWorkflowRunnable create(ProviderConfiguration providerConfiguration,
-      Event event, int threadNumber);
+      Environment environment, Event event, int threadNumber);
 }

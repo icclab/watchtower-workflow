@@ -13,62 +13,50 @@
  */
 package watchtower.workflow.configuration;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-
-import watchtower.workflow.configuration.KafkaConsumerConfiguration;
-import watchtower.workflow.configuration.ProviderConfiguration;
 import io.dropwizard.Configuration;
-import io.dropwizard.client.JerseyClientConfiguration;
+
+import javax.validation.constraints.NotNull;
 
 public class WatchtowerWorkflowConfiguration extends Configuration {
   @NotNull
   private String name;
-  
+
   @NotNull
   private KafkaConsumerConfiguration kafkaConsumerConfiguration;
-  
+
   @NotNull
   private KafkaProducerConfiguration kafkaProducerConfiguration;
-  
+
   @NotNull
   private String workflowProvider;
-  
+
   @NotNull
   private CamundaProviderConfiguration camundaProviderConfiguration;
-  
-  @Valid
-  @NotNull
-  private JerseyClientConfiguration jerseyClientConfiguration = new JerseyClientConfiguration();
-  
+
   public String getName() {
     return name;
   }
-  
+
   public KafkaConsumerConfiguration getKafkaConsumerConfiguration() {
     return kafkaConsumerConfiguration;
   }
-  
+
   public KafkaProducerConfiguration getKafkaProducerConfiguration() {
     return kafkaProducerConfiguration;
   }
-  
+
   public String getWorkflowProvider() {
     return workflowProvider;
   }
-  
+
   public ProviderConfiguration getWorkflowProviderConfiguration() {
     if (getWorkflowProvider().equalsIgnoreCase("camunda"))
       return getCamundaProviderConfiguration();
-    
+
     return null;
   }
-  
+
   public CamundaProviderConfiguration getCamundaProviderConfiguration() {
     return camundaProviderConfiguration;
-  }
-  
-  public JerseyClientConfiguration getJerseyClientConfiguration() {
-    return jerseyClientConfiguration;
   }
 }

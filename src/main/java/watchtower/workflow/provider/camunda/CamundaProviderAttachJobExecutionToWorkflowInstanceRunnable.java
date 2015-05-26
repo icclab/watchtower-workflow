@@ -13,21 +13,30 @@
  */
 package watchtower.workflow.provider.camunda;
 
+import io.dropwizard.client.JerseyClientBuilder;
+import io.dropwizard.client.JerseyClientConfiguration;
+import io.dropwizard.setup.Environment;
+
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import watchtower.common.automation.JobExecution;
+import watchtower.common.automation.JobExecutionUtils;
 import watchtower.workflow.configuration.CamundaProviderConfiguration;
 import watchtower.workflow.configuration.ProviderConfiguration;
 import watchtower.workflow.provider.ProviderAttachJobExecutionToWorkflowInstanceRunnable;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-//import com.sun.jersey.api.client.Client;
-//import com.sun.jersey.api.client.ClientResponse;
-//import com.sun.jersey.api.client.WebResource;
+// import com.sun.jersey.api.client.Client;
+// import com.sun.jersey.api.client.ClientResponse;
+// import com.sun.jersey.api.client.WebResource;
 
 public class CamundaProviderAttachJobExecutionToWorkflowInstanceRunnable extends
     ProviderAttachJobExecutionToWorkflowInstanceRunnable {
@@ -36,10 +45,12 @@ public class CamundaProviderAttachJobExecutionToWorkflowInstanceRunnable extends
 
   @Inject
   public CamundaProviderAttachJobExecutionToWorkflowInstanceRunnable(
-      @Assisted ProviderConfiguration providerConfiguration, @Assisted String workflowInstanceId,
-      @Assisted JobExecution execution, @Assisted int threadNumber) {
-    super(providerConfiguration, workflowInstanceId, execution, threadNumber);
-    logger.info("Initializing runnable for job execution");
+      @Assisted ProviderConfiguration providerConfiguration, @Assisted Environment environment,
+      @Assisted String workflowInstanceId, @Assisted JobExecution execution,
+      @Assisted int threadNumber) {
+    super(providerConfiguration, environment, workflowInstanceId, execution, threadNumber);
+
+    logger.info("Starting up workflow runnable for {}", workflowInstanceId);
   }
 
   @Override
@@ -47,22 +58,28 @@ public class CamundaProviderAttachJobExecutionToWorkflowInstanceRunnable extends
     CamundaProviderConfiguration camundaProviderConfiguration =
         (CamundaProviderConfiguration) providerConfiguration;
 
-    logger.info("Sending job execution back to camunda at {}",
-        (camundaProviderConfiguration.getEndpoint() + "/" + workflowInstanceId));
+    JerseyClientConfiguration jerseyClientConfiguration =
+        camundaProviderConfiguration.getJerseyClientConfiguration();
 
-    //Client client = Client.create();
-    //WebResource webResource =
-    //    client.resource(camundaProviderConfiguration.getEndpoint() + "/" + workflowInstanceId);
+    jerseyClientConfiguration.setGzipEnabledForRequests(false);
 
-    //ClientResponse response =
-    //    webResource.type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
-    //        .post(ClientResponse.class, execution);
+    Client client =
+        new JerseyClientBuilder(environment).using(
+            camundaProviderConfiguration.getJerseyClientConfiguration()).build(
+            "CamundaWorker" + threadNumber);
 
-    //logger.info("Got response {}", response);
+    WebTarget target =
+        client.target(camundaProviderConfiguration.getEndpoint()).path(workflowInstanceId);
 
-    //if (response.getStatus() != 200) {
-    //  logger.error("Failed to send job execution to Camunda with HTTP error code: "
-    //      + response.getStatus());
-    //}
+    Response response =
+        target.request(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE)
+            .post(Entity.entity(JobExecutionUtils.toJson(execution), MediaType.APPLICATION_JSON));
+
+    logger.info("Got response {}", response);
+
+    if (response.getStatus() != 200) {
+      logger.error("Failed to send job execution to Camunda with HTTP error code: "
+          + response.getStatus());
+    }
   }
 }

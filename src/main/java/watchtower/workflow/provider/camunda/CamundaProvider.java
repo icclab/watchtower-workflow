@@ -13,6 +13,7 @@
  */
 package watchtower.workflow.provider.camunda;
 
+import io.dropwizard.setup.Environment;
 import watchtower.common.automation.JobExecution;
 import watchtower.common.event.Event;
 import watchtower.workflow.configuration.ProviderConfiguration;
@@ -32,15 +33,15 @@ public class CamundaProvider extends Provider {
   private CamundaProviderAttachJobExecutionToWorkflowInstanceRunnableFactory camundaProviderAttachJobExecutionToWorkflowInstanceRunnableFactory;
 
   @Inject
-  public CamundaProvider(WatchtowerWorkflowConfiguration configuration) {
-    super(configuration);
+  public CamundaProvider(WatchtowerWorkflowConfiguration configuration, Environment environment) {
+    super(configuration, environment);
   }
 
   @Override
   protected CamundaProviderInstantiateWorkflowRunnable createInstantiateWorkflowRunnable(
       ProviderConfiguration providerConfiguration, Event event, int threadNumber) {
-    return camundaProviderInstantiateWorkflowRunnableFactory.create(providerConfiguration, event,
-        threadNumber);
+    return camundaProviderInstantiateWorkflowRunnableFactory.create(providerConfiguration,
+        environment, event, threadNumber);
   }
 
   @Override
@@ -48,6 +49,6 @@ public class CamundaProvider extends Provider {
       ProviderConfiguration providerConfiguration, String workflowInstanceId,
       JobExecution execution, int threadNumber) {
     return camundaProviderAttachJobExecutionToWorkflowInstanceRunnableFactory.create(
-        providerConfiguration, workflowInstanceId, execution, threadNumber);
+        providerConfiguration, environment, workflowInstanceId, execution, threadNumber);
   }
 }

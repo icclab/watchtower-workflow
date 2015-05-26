@@ -13,11 +13,12 @@
  */
 package watchtower.workflow.provider.camunda;
 
+import io.dropwizard.setup.Environment;
 import watchtower.common.automation.JobExecution;
 import watchtower.workflow.configuration.ProviderConfiguration;
 
 public interface CamundaProviderAttachJobExecutionToWorkflowInstanceRunnableFactory {
   CamundaProviderAttachJobExecutionToWorkflowInstanceRunnable create(
-      ProviderConfiguration providerConfiguration, String workflowInstanceId,
-      JobExecution execution, int threadNumber);
+      ProviderConfiguration providerConfiguration, Environment environment,
+      String workflowInstanceId, JobExecution execution, int threadNumber);
 }

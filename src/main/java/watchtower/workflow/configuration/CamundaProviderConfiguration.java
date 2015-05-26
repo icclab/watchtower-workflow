@@ -13,14 +13,27 @@
  */
 package watchtower.workflow.configuration;
 
+import io.dropwizard.client.JerseyClientConfiguration;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class CamundaProviderConfiguration extends ProviderConfiguration {
   @NotEmpty
   private String endpoint;
-  
+
+  private JerseyClientConfiguration jerseyClientConfiguration = new JerseyClientConfiguration();
+
+  @Valid
+  @NotNull
   public String getEndpoint() {
     return endpoint;
+  }
+
+  public JerseyClientConfiguration getJerseyClientConfiguration() {
+    return jerseyClientConfiguration;
   }
 
   @Override

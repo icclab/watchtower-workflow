@@ -13,19 +13,22 @@
  */
 package watchtower.workflow.provider;
 
+import io.dropwizard.setup.Environment;
 import watchtower.common.automation.JobExecution;
 import watchtower.workflow.configuration.ProviderConfiguration;
 
 public abstract class ProviderAttachJobExecutionToWorkflowInstanceRunnable implements Runnable {
   protected final ProviderConfiguration providerConfiguration;
+  protected final Environment environment;
   protected final String workflowInstanceId;
   protected final JobExecution execution;
   protected final int threadNumber;
 
   public ProviderAttachJobExecutionToWorkflowInstanceRunnable(
-      ProviderConfiguration providerConfiguration, String workflowInstanceId,
-      JobExecution execution, int threadNumber) {
+      ProviderConfiguration providerConfiguration, Environment environment,
+      String workflowInstanceId, JobExecution execution, int threadNumber) {
     this.providerConfiguration = providerConfiguration;
+    this.environment = environment;
     this.workflowInstanceId = workflowInstanceId;
     this.execution = execution;
     this.threadNumber = threadNumber;

@@ -14,6 +14,7 @@
 package watchtower.workflow.provider;
 
 import io.dropwizard.lifecycle.Managed;
+import io.dropwizard.setup.Environment;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -36,12 +37,15 @@ public abstract class Provider implements Managed {
   private static final Logger logger = LoggerFactory.getLogger(Provider.class);
 
   protected final ProviderConfiguration providerConfiguration;
+  protected final Environment environment;
   private ExecutorService executorService;
   private int numberOfThreads = 0;
 
   @Inject
-  public Provider(@Assisted WatchtowerWorkflowConfiguration configuration) {
+  public Provider(@Assisted WatchtowerWorkflowConfiguration configuration,
+      @Assisted Environment environment) {
     this.providerConfiguration = configuration.getCamundaProviderConfiguration();
+    this.environment = environment;
   }
 
   public void start() throws Exception {

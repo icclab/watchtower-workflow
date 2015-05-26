@@ -13,9 +13,11 @@
  */
 package watchtower.workflow.provider.camunda;
 
+import io.dropwizard.setup.Environment;
 import watchtower.common.event.Event;
 import watchtower.workflow.configuration.ProviderConfiguration;
 
 public interface CamundaProviderInstantiateWorkflowRunnableFactory {
-  CamundaProviderInstantiateWorkflowRunnable create(ProviderConfiguration providerConfiguration, Event event, int threadNumber);
+  CamundaProviderInstantiateWorkflowRunnable create(ProviderConfiguration providerConfiguration,
+      Environment environment, Event event, int threadNumber);
 }
