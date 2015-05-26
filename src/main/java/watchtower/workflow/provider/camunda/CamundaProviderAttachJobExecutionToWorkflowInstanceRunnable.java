@@ -34,9 +34,6 @@ import watchtower.workflow.provider.ProviderAttachJobExecutionToWorkflowInstance
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-// import com.sun.jersey.api.client.Client;
-// import com.sun.jersey.api.client.ClientResponse;
-// import com.sun.jersey.api.client.WebResource;
 
 public class CamundaProviderAttachJobExecutionToWorkflowInstanceRunnable extends
     ProviderAttachJobExecutionToWorkflowInstanceRunnable {
@@ -75,11 +72,10 @@ public class CamundaProviderAttachJobExecutionToWorkflowInstanceRunnable extends
         target.request(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE)
             .post(Entity.entity(JobExecutionUtils.toJson(execution), MediaType.APPLICATION_JSON));
 
-    logger.info("Got response {}", response);
-
-    if (response.getStatus() != 200) {
+    if (response.getStatus() != 200)
       logger.error("Failed to send job execution to Camunda with HTTP error code: "
           + response.getStatus());
-    }
+    else
+      logger.info("Response {}", response);
   }
 }
