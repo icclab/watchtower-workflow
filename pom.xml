@@ -52,6 +52,12 @@
 			<groupId>watchtower</groupId>
 			<artifactId>watchtower-common</artifactId>
 			<version>${watchtower.common.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.testng</groupId>
+					<artifactId>testng</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>io.dropwizard</groupId>

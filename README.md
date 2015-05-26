@@ -4,6 +4,9 @@
 	<img src="https://raw.githubusercontent.com/icclab/watchtower-common/master/watchtower.png" alt="Watchtower" title="Watchtower">
 </div>
 
+[![Build Status](https://travis-ci.org/icclab/watchtower-workflow.svg?branch=master)](https://travis-ci.org/icclab/watchtower-workflow)
+[![Coverage Status](https://coveralls.io/repos/icclab/watchtower-workflow/badge.svg?branch=master)](https://coveralls.io/r/icclab/watchtower-workflow?branch=master)
+
 # Overview
 
 **watchtower-workflow** is part of **watchtower**. Its primary role is to provide an interface between the workflow engine and the rest of **watchtower**'s components.
